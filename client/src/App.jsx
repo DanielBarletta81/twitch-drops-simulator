@@ -14,11 +14,14 @@ export default function App() {
     <main className="app-shell">
       <section className="hero">
         <div>
+        <section className="hero-card">
+       
           <p className="eyebrow">Creator Sponsorships / Drops Simulation</p>
           <h1>Real-time reward engagement dashboard</h1>
         <p className="subhead">
   Simulating how viewer engagement drives reward unlocks in real time.
 </p>
+ </section>
         </div>
 
         <div className={`connection-pill ${status}`}>
