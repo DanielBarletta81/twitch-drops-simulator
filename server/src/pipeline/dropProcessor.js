@@ -13,6 +13,17 @@ export function processDropTick(state, activity) {
     state.watchSeconds / state.campaign.thresholdSeconds,
     1
   );
+  const engagementScore = Number((progress * state.viewerCount).toFixed(2));
+
+  const analytics = {
+  viewerCount: state.viewerCount,
+  watchSeconds: state.watchSeconds,
+  progressPercent: Math.round(progress * 100),
+  completionRate: state.rewardUnlocked ? 100 : Math.round(progress * 100),
+  claimedRate: state.rewardClaimed ? 100 : 0,
+  engagementScore,
+  campaignStatus: state.campaign.active ? "active" : "paused",
+};
 
   if (progress >= 1 && !state.rewardUnlocked) {
     state.rewardUnlocked = true;
@@ -52,33 +63,35 @@ function createDropEvent(state, activity, insight) {
   );
 
   return {
-    id: nanoid(),
-    type: "DROP_PROGRESS",
-    activity,
-    processedAt,
-    latencyMs: processedAt - activity.createdAt,
-    campaign: state.campaign,
-    stream: {
-      title: state.campaign.streamTitle,
-      streamer: state.streamer,
-      viewerCount: state.viewerCount,
-    },
-    viewer: {
-      userId: state.userId,
-      username: state.username,
-      watchSeconds: state.watchSeconds,
-      progress,
-      rewardUnlocked: state.rewardUnlocked,
-      rewardClaimed: state.rewardClaimed,
-    },
-    reward: {
-      id: state.campaign.rewardId,
-      name: state.campaign.rewardName,
-      description: state.campaign.rewardDescription,
-      thresholdSeconds: state.campaign.thresholdSeconds,
-    },
-    insight,
-  };
+  id: nanoid(),
+  type: "DROP_PROGRESS",
+  activity,
+  processedAt,
+  latencyMs: processedAt - activity.createdAt,
+  engagementScore,
+  analytics,
+  campaign: state.campaign,
+  stream: {
+    title: state.campaign.streamTitle,
+    streamer: state.streamer,
+    viewerCount: state.viewerCount,
+  },
+  viewer: {
+    userId: state.userId,
+    username: state.username,
+    watchSeconds: state.watchSeconds,
+    progress,
+    rewardUnlocked: state.rewardUnlocked,
+    rewardClaimed: state.rewardClaimed,
+  },
+  reward: {
+    id: state.campaign.rewardId,
+    name: state.campaign.rewardName,
+    description: state.campaign.rewardDescription,
+    thresholdSeconds: state.campaign.thresholdSeconds,
+  },
+  insight,
+};
 }
 
 function createInsight(state, progress) {

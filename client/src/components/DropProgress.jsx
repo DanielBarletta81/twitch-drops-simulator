@@ -25,9 +25,10 @@ export function DropProgress({ event, onClaim, claimResult }) {
         </div>
 
       <button
-        disabled={!viewer?.rewardUnlocked || viewer?.rewardClaimed}
-        onClick={onClaim}
-      >
+  className={`claim-btn ${viewer?.rewardUnlocked ? "active" : ""}`}
+  disabled={!viewer?.rewardUnlocked || viewer?.rewardClaimed}
+  onClick={onClaim}
+>
         {viewer?.rewardClaimed
           ? "Claimed"
           : viewer?.rewardUnlocked
