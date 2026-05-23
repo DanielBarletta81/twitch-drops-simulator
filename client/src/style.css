@@ -366,6 +366,15 @@ button:disabled {
 .campaign-form button {
   align-self: end;
 }
+.subhead {
+  color: #cfc7e9;
+  margin-top: 10px;
+  font-size: 1rem;
+}
+.metric-card.highlight {
+  border: 1px solid #9146ff;
+  box-shadow: 0 0 20px rgba(145, 70, 255, 0.3);
+}
 
 @media (max-width: 780px) {
   .campaign-form {

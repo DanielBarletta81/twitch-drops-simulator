@@ -14,7 +14,7 @@ export function CampaignAnalytics({ event }) {
           <Metric label="Watch Progress" value={`${analytics.progressPercent}%`} />
           <Metric label="Completion Rate" value={`${analytics.completionRate}%`} />
           <Metric label="Claimed Rate" value={`${analytics.claimedRate}%`} />
-          <Metric label="Engagement Score" value={analytics.engagementScore} />
+          <Metric label="Engagement Score" value={analytics.engagementScore} highlight />
           <Metric label="Campaign Status" value={analytics.campaignStatus} />
         </div>
       )}
@@ -22,9 +22,9 @@ export function CampaignAnalytics({ event }) {
   );
 }
 
-function Metric({ label, value }) {
+function Metric({ label, value, highlight }) {
   return (
-    <div className="metric-card">
+    <div className={`metric-card ${highlight ? "highlight" : ""}`}>
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
