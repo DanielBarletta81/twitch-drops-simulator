@@ -277,4 +277,54 @@ button:disabled {
     flex-direction: column;
     gap: 4px;
   }
+
+  .campaign-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.campaign-form label {
+  display: grid;
+  gap: 8px;
+  color: #d9ccff;
+  font-weight: 700;
+}
+
+.campaign-form input,
+.campaign-form textarea {
+  width: 100%;
+  border: 1px solid rgba(191, 148, 255, 0.22);
+  border-radius: 14px;
+  background: rgba(8, 7, 13, 0.72);
+  color: #f7f2ff;
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.campaign-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.checkbox-row {
+  display: flex !important;
+  align-items: center;
+  grid-template-columns: auto 1fr !important;
+}
+
+.checkbox-row input {
+  width: auto;
+}
+
+.campaign-form button {
+  align-self: end;
+}
+
+@media (max-width: 780px) {
+  .campaign-form {
+    grid-template-columns: 1fr;
+  }
+}
 }

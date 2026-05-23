@@ -4,7 +4,7 @@ import { WebSocketServer } from "ws";
 import { config } from "./config.js";
 import { viewerState } from "./simulator/viewerState.js";
 import { generateActivity } from "./simulator/activityGenerator.js";
-import { processDropTick, claimReward } from "./pipeline/dropProcessor.js";
+import { processDropTick, claimReward, updateCampaign } from "./pipeline/dropProcessor.js";
 import { Broadcaster } from "./websocket/broadcaster.js";
 import { createHealthRouter } from "./routes/health.js";
 
@@ -32,6 +32,18 @@ app.post("/api/claim", (req, res) => {
   });
 
   res.json(result);
+});
+
+app.post("/api/campaign", (req, res) => {
+  const campaign = updateCampaign(viewerState, req.body);
+
+  broadcaster.broadcast({
+    type: "CAMPAIGN_UPDATED",
+    campaign,
+    viewer: viewerState,
+  });
+
+  res.json({ ok: true, campaign });
 });
 
 wss.on("connection", (socket) => {

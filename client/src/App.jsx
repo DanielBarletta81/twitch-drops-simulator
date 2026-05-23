@@ -3,6 +3,7 @@ import { StreamPanel } from "./components/StreamPanel";
 import { DropProgress } from "./components/DropProgress";
 import { EventFeed } from "./components/EventFeed";
 import { InsightPanel } from "./components/InsightPanel";
+import { CampaignConfigPanel } from "./components/CampaignConfigPanel";
 import "./style.css";
 
 export default function App() {
@@ -27,7 +28,7 @@ export default function App() {
       </section>
 
       <StreamPanel event={latest} status={status} />
-
+       <CampaignConfigPanel latest={latest} />
       <section className="dashboard-grid">
         <DropProgress
           event={latest}
@@ -36,7 +37,7 @@ export default function App() {
         />
         <InsightPanel event={latest} />
       </section>
-
+       
       <EventFeed events={events} />
     </main>
   );

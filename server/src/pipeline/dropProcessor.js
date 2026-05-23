@@ -1,13 +1,16 @@
 import { nanoid } from "nanoid";
-import { config } from "../config.js";
 
 export function processDropTick(state, activity) {
+  if (!state.campaign.active) {
+    return createDropEvent(state, activity, "Campaign is paused.");
+  }
+
   if (!state.rewardUnlocked) {
     state.watchSeconds += 1;
   }
 
   const progress = Math.min(
-    state.watchSeconds / config.rewardThresholdSeconds,
+    state.watchSeconds / state.campaign.thresholdSeconds,
     1
   );
 
@@ -15,7 +18,38 @@ export function processDropTick(state, activity) {
     state.rewardUnlocked = true;
   }
 
+  return createDropEvent(state, activity, createInsight(state, progress));
+}
+
+export function claimReward(state) {
+  if (!state.rewardUnlocked) {
+    return { ok: false, message: "Reward is not unlocked yet." };
+  }
+
+  state.rewardClaimed = true;
+  return { ok: true, message: "Reward claimed." };
+}
+
+export function updateCampaign(state, updates) {
+  state.campaign = {
+    ...state.campaign,
+    ...updates,
+    thresholdSeconds: Number(updates.thresholdSeconds) || state.campaign.thresholdSeconds,
+  };
+
+  state.watchSeconds = 0;
+  state.rewardUnlocked = false;
+  state.rewardClaimed = false;
+
+  return state.campaign;
+}
+
+function createDropEvent(state, activity, insight) {
   const processedAt = Date.now();
+  const progress = Math.min(
+    state.watchSeconds / state.campaign.thresholdSeconds,
+    1
+  );
 
   return {
     id: nanoid(),
@@ -23,8 +57,9 @@ export function processDropTick(state, activity) {
     activity,
     processedAt,
     latencyMs: processedAt - activity.createdAt,
+    campaign: state.campaign,
     stream: {
-      title: state.streamTitle,
+      title: state.campaign.streamTitle,
       streamer: state.streamer,
       viewerCount: state.viewerCount,
     },
@@ -37,21 +72,13 @@ export function processDropTick(state, activity) {
       rewardClaimed: state.rewardClaimed,
     },
     reward: {
-      id: "drop_founder_badge",
-      name: "Sky City Founder Badge",
-      thresholdSeconds: config.rewardThresholdSeconds,
+      id: state.campaign.rewardId,
+      name: state.campaign.rewardName,
+      description: state.campaign.rewardDescription,
+      thresholdSeconds: state.campaign.thresholdSeconds,
     },
-    insight: createInsight(state, progress),
+    insight,
   };
-}
-
-export function claimReward(state) {
-  if (!state.rewardUnlocked) {
-    return { ok: false, message: "Reward is not unlocked yet." };
-  }
-
-  state.rewardClaimed = true;
-  return { ok: true, message: "Reward claimed." };
 }
 
 function createInsight(state, progress) {
