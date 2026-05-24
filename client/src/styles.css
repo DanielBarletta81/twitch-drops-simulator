@@ -31,14 +31,6 @@ button {
   padding: 48px 0;
 }
 
-.hero {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: start;
-  margin-bottom: 28px;
-}
-
 .eyebrow {
   margin: 0 0 10px;
   color: #bf94ff;
